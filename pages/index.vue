@@ -13,7 +13,7 @@
 export default {
   data: () => {
     return {
-      email: 'jasen@jcms.io',
+      email: 'admin@jcms.io',
       password: 'Strapi123456',
     }
   },
