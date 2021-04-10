@@ -4,7 +4,7 @@
       v-show="loaded"
       class="transition-opacity cursor-pointer fixed pl-4 top-0 text-white text-2xl font-bold flex items-center"
       style="background-color: #00695c; width: 240px; height: 60px"
-      @click="reloadIframe('admin')"
+      @click="reloadIframe()"
     >
       <!-- <a href="/admin"> -->
       <span class="font-medium"> &lt; </span>
@@ -17,6 +17,7 @@
       <!-- <button @click="logout()">LOGOUT</button> -->
       <iframe
         id="admin"
+        ref="admin"
         :src="$config.strapiUrl || 'http://localhost:1337'"
         width="100%"
         height="100%"
@@ -54,7 +55,7 @@ export default {
       const adminUserInfo = JSON.parse(sessionStorage.getItem('adminUserInfo'))
       const url = window.location.href
       // eslint-disable-next-line no-console
-      console.log(url)
+      // console.log(url)
       return { adminJwtToken, adminUserInfo, url }
     },
     setStrapiInfo() {
@@ -71,11 +72,17 @@ export default {
         })
       }
     },
-    reloadIframe(id, path = '/' + id) {
+    reloadIframe(id) {
       // eslint-disable-next-line no-console
-      console.log('rerouting to', path)
+      console.log('rerouting to /admin')
       if (process.client) {
-        document.getElementById(id).src = path // document.getElementById(id).src
+        document
+          .getElementById('admin')
+          .contentWindow.postMessage(
+            JSON.stringify({ path: '/', method: 'changeRoute' }),
+            '*'
+          )
+        // document.getElementById(id).src = document.getElementById(id).src
       }
     },
   },

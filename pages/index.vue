@@ -37,8 +37,8 @@ export default {
       this.$router.push('/')
     },
     loginStrapi() {
-      fetch(`http://localhost:1337/admin/login`, {
-        // fetch(`${process.env.STRAPI_URL}/admin/login`, {
+      // fetch(`http://localhost:1337/admin/login`, {
+      fetch(`${this.$config.strapiUrl}/admin/login`, {
         credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',
