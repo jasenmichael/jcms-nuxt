@@ -1,78 +1,104 @@
+/* eslint-disable no-console */
+import axios from 'axios'
 require('dotenv').config()
-export default {
-  // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
 
-  // Global page headers: https://go.nuxtjs.dev/config-head
-  head: {
-    title: 'jcms-nuxt',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+async function getContentTypes() {
+  return await axios
+    .get(`${process.env.STRAPI_URL}/hello`)
+    .then((res) => {
+      // console.log(res.data)
+      return JSON.parse(JSON.stringify(res.data))
+    })
+    .catch(function (error) {
+      console.log(error)
+      return { error }
+    })
+}
+
+// async function getPublicContent(params) {
+
+// }
+
+export default async () => {
+  return {
+    // Target: https://go.nuxtjs.dev/config-target
+    target: 'static',
+
+    // Global page headers: https://go.nuxtjs.dev/config-head
+    head: {
+      title: 'jcms-nuxt',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { hid: 'description', name: 'description', content: '' },
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    },
+
+    // Global CSS: https://go.nuxtjs.dev/config-css
+    css: [],
+
+    // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+    plugins: [],
+
+    // Auto import components: https://go.nuxtjs.dev/config-components
+    components: true,
+
+    // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
+    buildModules: [
+      // https://go.nuxtjs.dev/eslint
+      '@nuxtjs/eslint-module',
+      // https://go.nuxtjs.dev/stylelint
+      '@nuxtjs/stylelint-module',
+      // https://go.nuxtjs.dev/tailwindcss
+      '@nuxtjs/tailwindcss',
+      // https://vueformulate.com/guide/installation/#nuxt
+      '@braid/vue-formulate/nuxt',
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
-  },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
-
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
-
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/stylelint
-    '@nuxtjs/stylelint-module',
-    // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss',
-  ],
-
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-    // https://go.nuxtjs.dev/content
-    '@nuxt/content',
-    // https://strapi.nuxtjs.org/setup
-    '@nuxtjs/strapi',
-    '@nuxtjs/proxy',
-  ],
-  proxy: {
-    '/api': {
-      target: process.env.STRAPI_URL || 'http://localhost:1337',
-      pathRewrite: {
-        '^/api': '/',
+    // Modules: https://go.nuxtjs.dev/config-modules
+    modules: [
+      // https://go.nuxtjs.dev/axios
+      '@nuxtjs/axios',
+      // https://go.nuxtjs.dev/pwa
+      '@nuxtjs/pwa',
+      // https://go.nuxtjs.dev/content
+      // '@nuxt/content',
+      // https://strapi.nuxtjs.org/setup
+      '@nuxtjs/strapi',
+      '@nuxtjs/proxy',
+    ],
+    proxy: {
+      '/api': {
+        target: process.env.STRAPI_URL || 'http://localhost:1337',
+        pathRewrite: {
+          '^/api': '/',
+        },
       },
     },
-  },
-  strapi: {
-    url: '/api',
-  },
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
-
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
-  pwa: {
-    manifest: {
-      lang: 'en',
+    strapi: {
+      url: '/api',
     },
-  },
+    // Axios module configuration: https://go.nuxtjs.dev/config-axios
+    axios: {},
 
-  // Content module configuration: https://go.nuxtjs.dev/config-content
-  content: {},
+    // PWA module configuration: https://go.nuxtjs.dev/pwa
+    pwa: {
+      manifest: {
+        lang: 'en',
+      },
+    },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
-  publicRuntimeConfig: {
-    strapiUrl: process.env.STRAPI_URL || 'http://localhost:1337',
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-  },
+    // Content module configuration: https://go.nuxtjs.dev/config-content
+    content: {},
+
+    // Build Configuration: https://go.nuxtjs.dev/config-build
+    build: {},
+    publicRuntimeConfig: {
+      strapiUrl: process.env.STRAPI_URL || 'http://localhost:1337',
+      baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+      isDev: process.env.NODE_ENV === 'development',
+      contentTypes: await getContentTypes(),
+    },
+  }
 }

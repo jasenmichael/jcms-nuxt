@@ -39,5 +39,6 @@ module.exports = {
     // require('tailwindcss-textshadow'),
     // require('tailwind-hamburgers'),
     // require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/forms'),
   ],
 }

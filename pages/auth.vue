@@ -1,0 +1,132 @@
+<template>
+  <div>
+    <div class="flex">
+      <div class="border-b border-gray-200 mx-auto items-center">
+        <nav class="-mb-px flex space-x-2" aria-label="Tabs">
+          <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
+          <div
+            :class="selected === 'login' ? 'selected' : 'notselected'"
+            @click="selected = 'login'"
+          >
+            <!--
+            Heroicon name: solid/user
+
+            Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500"
+          -->
+            <svg
+              class="text-gray-400 group-hover:text-gray-500 -ml-0.5 mr-2 h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span>Login</span>
+          </div>
+
+          <div
+            :class="selected === 'register' ? 'selected' : 'notselected'"
+            @click="selected = 'register'"
+          >
+            <!-- Heroicon name: solid/office-building -->
+            <svg
+              class="text-gray-400 group-hover:text-gray-500 -ml-0.5 mr-2 h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span>Register</span>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <FormulateForm v-model="formValues">
+      <FormulateInput label="Username" name="username" />
+      <FormulateInput label="Email" name="email" />
+    </FormulateForm>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      formValues: {
+        username: 'mojiko',
+        email: 'mojiko@gmail.com',
+      },
+      selected: 'login',
+      email: 'admin@jcms.io',
+      password: 'Strapi123456',
+    }
+  },
+  computed: {
+    user() {
+      return this.$strapi.user
+    },
+  },
+  methods: {
+    async login() {
+      await this.$strapi.login({
+        identifier: this.email,
+        password: this.password,
+      })
+      this.loginStrapi()
+      // this.$router.push('/authenticated')
+    },
+    logout() {
+      this.$strapi.logout()
+      this.res = ''
+      this.$router.push('/')
+    },
+    loginStrapi() {
+      // fetch(`http://localhost:1337/admin/login`, {
+      fetch(`${this.$config.strapiUrl}/admin/login`, {
+        credentials: 'omit',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+        }),
+        method: 'POST',
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          const token = res.data.token || null
+          const user = res.data.user || null
+          // eslint-disable-next-line no-console
+          console.log({
+            token,
+            user,
+          })
+          sessionStorage.setItem('adminJwtToken', JSON.stringify(token))
+          sessionStorage.setItem('adminUserInfo', JSON.stringify(user))
+        })
+    },
+  },
+}
+</script>
+
+<style>
+.selected {
+  @apply border-indigo-500 text-indigo-600 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm;
+}
+.notselected {
+  @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm;
+}
+</style>
