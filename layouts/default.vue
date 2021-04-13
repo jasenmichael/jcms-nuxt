@@ -22,10 +22,10 @@
         </div>
       </div>
     </nav>
-    <div v-if="$nuxt.$route.path === '/admin'">
+    <!-- <div v-if="$nuxt.$route.path === '/admin'">
       <Nuxt keep-alive :navbar-height="getNavbarHeight" />
-    </div>
-    <div v-else>
+    </div> -->
+    <div keep-alive>
       <Nuxt />
     </div>
   </div>
