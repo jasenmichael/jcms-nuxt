@@ -15,6 +15,7 @@
         <nuxt-link to="/admin"> CMS Dashboard </nuxt-link>
       </button>
     </div>
+    <pre>{{ user }}</pre>
     <pre>{{ $config }}</pre>
   </div>
 </template>
@@ -23,7 +24,7 @@
 export default {
   data: () => {
     return {
-      email: 'admin@jcms.io',
+      email: 'jasen@jcms.io',
       password: 'Strapi123456',
     }
   },
@@ -38,15 +39,14 @@ export default {
         identifier: this.email,
         password: this.password,
       })
-      this.loginStrapi()
+      this.loginStrapiAdmin()
       // this.$router.push('/authenticated')
     },
     logout() {
       this.$strapi.logout()
-      this.res = ''
       this.$router.push('/')
     },
-    loginStrapi() {
+    loginStrapiAdmin() {
       fetch(`${this.$config.strapiUrl}/admin/login`, {
         credentials: 'omit',
         headers: {
@@ -63,14 +63,18 @@ export default {
           const token = res.data.token || null
           const user = res.data.user || null
           // eslint-disable-next-line no-console
-          console.log({
-            token,
-            user,
-          })
+          // console.log({
+          //   token,
+          //   user,
+          // })
           // sessionStorage.setItem('adminJwtToken', JSON.stringify(token))
           // sessionStorage.setItem('adminUserInfo', JSON.stringify(user))
           localStorage.setItem('adminJwtToken', JSON.stringify(token))
           localStorage.setItem('adminUserInfo', JSON.stringify(user))
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log(err)
         })
     },
   },

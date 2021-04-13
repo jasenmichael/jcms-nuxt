@@ -1,5 +1,6 @@
 <template>
   <div class="fixed shadow-md z-50 w-full" style="background-color: #fafafa">
+    <!-- @click="routeIframe('/')" -->
     <div
       v-show="loaded"
       class="transition-opacity cursor-pointer fixed pl-4 text-white text-2xl font-bold flex items-center"
@@ -42,14 +43,14 @@ export default {
       loaded: false,
     }
   },
-  watchQuery(newQuery, oldQuery) {
-    // Only execute component methods if the old query string contained `bar`
-    // and the new query string contains `foo`
-    console.log('OLD', newQuery.q)
-    console.log('NEW', oldQuery.q)
-    this.routeIframe(newQuery.q) // .replace(/%2F/g, '/'))
-    return newQuery.q && oldQuery.q
-  },
+  // watchQuery(newQuery, oldQuery) {
+  //   // Only execute component methods if the old query string contained `bar`
+  //   // and the new query string contains `foo`
+  //   console.log('OLD', newQuery.q)
+  //   console.log('NEW', oldQuery.q)
+  //   this.routeIframe(newQuery.q) // .replace(/%2F/g, '/'))
+  //   return newQuery.q && oldQuery.q
+  // },
   async mounted() {
     // console.log(yo())
     await this.addMessageListener()
@@ -76,9 +77,9 @@ export default {
       console.log('message recieved from iframe')
       const path = event.data.path
       if (path) {
-        // console.log(path)
-        // this.routeIframe(path)
-        this.$router.push({ path: '?q=' + path /* .substring(1) */ })
+        console.log(path)
+        this.routeIframe(path)
+        // this.$router.push({ path: '?q=' + path /* .substring(1) */ })
       }
     },
     getStrapiInfo() {
@@ -111,6 +112,7 @@ export default {
     },
     routeIframe(path) {
       routeIframe(path, this.$config.strapiUrl)
+      this.$router.push({ path: '/admin' })
     },
   },
 }
