@@ -105,7 +105,8 @@ export default {
           adminIframe.contentWindow.postMessage(
             JSON.stringify({ ...this.getStrapiInfo(), method: 'login' }),
             // '*'
-            this.$config.strapiUrl
+            this.$config.frontendUrl
+            // this.$config.strapiUrl
           )
         })
       }
