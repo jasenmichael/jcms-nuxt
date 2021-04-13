@@ -14,9 +14,31 @@
         <div class="flex flex-col mx-auto">
           <!-- nav -->
           <div class="flex px-6 py-2">
-            <nuxt-link to="/" class="">home</nuxt-link>
-            <div class="ml-auto flex space-x-2">
-              <div>Login/Register</div>
+            <nuxt-link to="/" class="">Home</nuxt-link>
+            <div class="ml-auto">
+              <div>
+                <nuxt-link
+                  v-if="!$strapi.user"
+                  to="/auth"
+                  class="border-2 border-gray-300 rounded px-2"
+                >
+                  Login/Register
+                </nuxt-link>
+                <div v-else>
+                  <nuxt-link
+                    class="border-2 border-gray-300 rounded px-2"
+                    to="/me"
+                  >
+                    Account
+                  </nuxt-link>
+                  <nuxt-link
+                    class="border-2 border-gray-300 rounded ml-1 px-2"
+                    to="/logout"
+                  >
+                    Logout
+                  </nuxt-link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

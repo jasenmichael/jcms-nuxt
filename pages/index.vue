@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-lg flex flex-col mx-auto">
-    <div class="px-2 grid grid-rows-1">
+  <div class="max-w-xl flex flex-col mx-auto">
+    <!-- <div class="px-2 grid grid-rows-1">
       <button v-if="!$strapi.user" @click="login">Login</button>
       <button v-else @click="logout">Logout</button>
       <button v-if="$strapi.user">
@@ -14,14 +14,32 @@
       <button v-if="$strapi.user">
         <nuxt-link to="/admin"> CMS Dashboard </nuxt-link>
       </button>
+    </div> -->
+    <!-- <pre>{{ user }}</pre> -->
+    <pre>frontendUrl: {{ $config.baseUrl }}</pre>
+    <pre>jCmsUrl: {{ $config.strapiUrl }}</pre>
+    <hr />
+    <p class="text-base font-bold">
+      access public endpoints with $strapi.find(endpoint)
+    </p>
+    <p class="capitalize font-bold">public endpoints:</p>
+    <div v-for="(endpoint, i) in endpoints" :key="i">
+      <a class="pl-4" :href="endpoint" target="_blank"> > {{ endpoint }}</a>
     </div>
-    <pre>{{ user }}</pre>
-    <pre>{{ $config }}</pre>
+    <hr class="pt-3" />
+    <pre>siteSettings: {{ siteSettings }}</pre>
   </div>
 </template>
 
 <script>
 export default {
+  async asyncData({ $strapi, $config }) {
+    const siteSettings = await $strapi.find('site-settings')
+    const endpoints = await $config.contentTypes.map(
+      (type) => `/api/${type.endpoint}`
+    )
+    return { siteSettings, endpoints }
+  },
   data: () => {
     return {
       email: 'jasen@jcms.io',

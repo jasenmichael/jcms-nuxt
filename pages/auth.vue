@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex">
+    <div class="flex flex-col mx-auto">
       <div class="border-b border-gray-200 mx-auto items-center">
         <nav class="-mb-px flex space-x-2" aria-label="Tabs">
           <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
@@ -51,26 +51,49 @@
           </div>
         </nav>
       </div>
+      <div class="mx-auto pt-6">
+        <div class="p-8 border-2 border-gray-300 rounded-lg">
+          <div v-if="selected === 'login'">
+            <FormulateForm v-model="formValues">
+              <FormulateInput label="Email" type="email" name="email" />
+              <FormulateInput
+                label="Password"
+                type="password"
+                name="password"
+              />
+            </FormulateForm>
+            <button
+              class="font- ml-auto border-2 mt-4 py-3 w-full border-gray-300"
+              @click="login()"
+            >
+              Login
+            </button>
+          </div>
+          <div v-if="selected === 'register'">
+            <div>Register</div>
+            username email password
+          </div>
+        </div>
+      </div>
     </div>
-
-    <FormulateForm v-model="formValues">
-      <FormulateInput label="Username" name="username" />
-      <FormulateInput label="Email" name="email" />
-    </FormulateForm>
   </div>
 </template>
 
 <script>
 export default {
+  asyncData({ params }) {
+    // eslint-disable-next-line no-console
+    console.log(params)
+  },
   data() {
     return {
       formValues: {
-        username: 'mojiko',
-        email: 'mojiko@gmail.com',
+        email: 'admin@jcms.io',
+        password: 'Strapi123456',
       },
       selected: 'login',
-      email: 'admin@jcms.io',
-      password: 'Strapi123456',
+      // email: 'admin@jcms.io',
+      // password: 'Strapi123456',
     }
   },
   computed: {
@@ -81,19 +104,17 @@ export default {
   methods: {
     async login() {
       await this.$strapi.login({
-        identifier: this.email,
-        password: this.password,
+        identifier: this.formValues.email,
+        password: this.formValues.password,
       })
-      this.loginStrapi()
-      // this.$router.push('/authenticated')
+      this.loginStrapiAdmin()
+      this.$router.push('/me')
     },
     logout() {
       this.$strapi.logout()
-      this.res = ''
       this.$router.push('/')
     },
-    loginStrapi() {
-      // fetch(`http://localhost:1337/admin/login`, {
+    loginStrapiAdmin() {
       fetch(`${this.$config.strapiUrl}/admin/login`, {
         credentials: 'omit',
         headers: {
@@ -110,15 +131,62 @@ export default {
           const token = res.data.token || null
           const user = res.data.user || null
           // eslint-disable-next-line no-console
-          console.log({
-            token,
-            user,
-          })
-          sessionStorage.setItem('adminJwtToken', JSON.stringify(token))
-          sessionStorage.setItem('adminUserInfo', JSON.stringify(user))
+          // console.log({
+          //   token,
+          //   user,
+          // })
+          // sessionStorage.setItem('adminJwtToken', JSON.stringify(token))
+          // sessionStorage.setItem('adminUserInfo', JSON.stringify(user))
+          localStorage.setItem('adminJwtToken', JSON.stringify(token))
+          localStorage.setItem('adminUserInfo', JSON.stringify(user))
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log(err)
         })
     },
   },
+  // methods: {
+  //   async login() {
+  //     await this.$strapi.login({
+  //       identifier: this.email,
+  //       password: this.password,
+  //     })
+  //     this.loginStrapi()
+  //     // this.$router.push('/authenticated')
+  //   },
+  //   logout() {
+  //     this.$strapi.logout()
+  //     this.res = ''
+  //     this.$router.push('/')
+  //   },
+  //   loginStrapi() {
+  //     // fetch(`http://localhost:1337/admin/login`, {
+  //     fetch(`${this.$config.strapiUrl}/admin/login`, {
+  //       credentials: 'omit',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         email: this.email,
+  //         password: this.password,
+  //       }),
+  //       method: 'POST',
+  //     })
+  //       .then((res) => res.json())
+  //       .then((res) => {
+  //         const token = res.data.token || null
+  //         const user = res.data.user || null
+  //         // eslint-disable-next-line no-console
+  //         console.log({
+  //           token,
+  //           user,
+  //         })
+  //         sessionStorage.setItem('adminJwtToken', JSON.stringify(token))
+  //         sessionStorage.setItem('adminUserInfo', JSON.stringify(user))
+  //       })
+  //   },
+  // },
 }
 </script>
 
@@ -129,4 +197,10 @@ export default {
 .notselected {
   @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm;
 }
+
+.formulate-input-label {
+  @apply text-gray-700;
+}
+
+/* formulate-input-label--before */
 </style>
