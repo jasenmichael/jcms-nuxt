@@ -88,12 +88,10 @@ export default {
   data() {
     return {
       formValues: {
-        email: 'admin@jcms.io',
-        password: 'Strapi123456',
+        email: '',
+        password: '',
       },
       selected: 'login',
-      // email: 'admin@jcms.io',
-      // password: 'Strapi123456',
     }
   },
   computed: {
