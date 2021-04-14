@@ -121,8 +121,8 @@ export default {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: this.email,
-          password: this.password,
+          email: this.formValues.email,
+          password: this.formValues.password,
         }),
         method: 'POST',
       })
