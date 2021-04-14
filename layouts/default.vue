@@ -47,7 +47,7 @@
     <!-- <div v-if="$nuxt.$route.path === '/admin'">
       <Nuxt keep-alive :navbar-height="getNavbarHeight" />
     </div> -->
-    <div keep-alive>
+    <div>
       <Nuxt />
     </div>
   </div>

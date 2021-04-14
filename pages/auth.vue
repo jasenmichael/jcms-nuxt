@@ -113,7 +113,7 @@ export default {
       this.$router.push('/')
     },
     loginStrapiAdmin() {
-      fetch(`${this.$config.strapiUrl}/admin/login`, {
+      return fetch(`${this.$config.strapiUrl}/admin/login`, {
         credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',

@@ -4,8 +4,8 @@ export const routeIframe = (path, frontendUrl) => {
   if (process.client) {
     document.getElementById('admin').contentWindow.postMessage(
       JSON.stringify({ path, method: 'changeRoute' }),
-      // '*'
-      frontendUrl
+      '*'
+      // frontendUrl
     )
     // document.getElementById(id).src = document.getElementById(id).src
   }
