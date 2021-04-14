@@ -27,7 +27,8 @@
       <a class="pl-4" :href="endpoint" target="_blank"> > {{ endpoint }}</a>
     </div>
     <hr class="pt-3" />
-    <pre>siteSettings: {{ siteSettings }}</pre>
+    <!-- <pre>siteSettings: {{ siteSettings }}</pre> -->
+    <p>Login to access private endpoints, and the JCMS Dashboard</p>
   </div>
 </template>
 

@@ -12,8 +12,9 @@ export default {
     logout() {
       this.$strapi.logout()
       // clear sessionStorage
-      sessionStorage.removeItem('adminJwtToken')
-      sessionStorage.removeItem('adminUserInfo')
+      localStorage.removeItem('adminJwtToken')
+      localStorage.removeItem('adminUserInfo')
+      localStorage.removeItem('url')
       this.$router.push('/')
     },
   },
