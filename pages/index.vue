@@ -1,34 +1,39 @@
 <template>
-  <div class="max-w-xl flex flex-col mx-auto">
-    <!-- <div class="px-2 grid grid-rows-1">
-      <button v-if="!$strapi.user" @click="login">Login</button>
-      <button v-else @click="logout">Logout</button>
-      <button v-if="$strapi.user">
-        <nuxt-link to="/authenticated" class="inline-block">
-          User Profile
-        </nuxt-link>
-      </button>
-      <button>
-        <nuxt-link to="/auth"> login/register </nuxt-link>
-      </button>
-      <button v-if="$strapi.user">
-        <nuxt-link to="/admin"> CMS Dashboard </nuxt-link>
-      </button>
-    </div> -->
-    <!-- <pre>{{ user }}</pre> -->
-    <pre>frontendUrl: {{ $config.baseUrl }}</pre>
-    <pre>jCmsUrl: {{ $config.strapiUrl }}</pre>
+  <div class="max-w-2xl flex flex-col mx-auto pt-6">
+    <div class="text-lg">
+      <span class="font-bold">frontendUrl:</span> {{ $config.baseUrl }}
+    </div>
+    <div class="text-lg">
+      <span class="font-bold"> jCmsUrl:</span> {{ $config.strapiUrl }}
+    </div>
     <hr />
     <p class="text-base font-bold">
-      access public endpoints with $strapi.find(endpoint)
+      Access public endpoints with $strapi.find(endpoint)
+      <br />
+      or {{ $config.strapiUrl }}/endpoint
     </p>
+    <hr />
     <p class="capitalize font-bold">public endpoints:</p>
     <div v-for="(endpoint, i) in endpoints" :key="i">
       <a class="pl-4" :href="endpoint" target="_blank"> > {{ endpoint }}</a>
     </div>
     <hr class="pt-3" />
     <!-- <pre>siteSettings: {{ siteSettings }}</pre> -->
-    <p>Login to access private endpoints, and the JCMS Dashboard</p>
+    <div class="items-center">
+      <p>
+        <span>
+          <nuxt-link to="/auth" class="underline text-blue-800">
+            Login
+          </nuxt-link>
+        </span>
+        to access private endpoints, and (if Administrator or Editor) the
+        <span>
+          <nuxt-link to="/admin" class="underline text-blue-800">
+            JCMS Dashboard
+          </nuxt-link>
+        </span>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -37,7 +42,7 @@ export default {
   async asyncData({ $strapi, $config }) {
     const siteSettings = await $strapi.find('site-settings')
     const endpoints = await $config.contentTypes.map(
-      (type) => `${$config.strapiUrl}/${type.endpoint}`
+      (type) => `/${type.endpoint}`
     )
     return { siteSettings, endpoints }
   },

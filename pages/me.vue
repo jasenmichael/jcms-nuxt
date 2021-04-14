@@ -1,6 +1,9 @@
 <template>
   <div class="w-screen mx-4">
-    <button class="w-full text-xl font-bold">
+    <button
+      v-if="$strapi.user.role.type !== 'authenticated'"
+      class="w-full text-xl font-bold"
+    >
       <nuxt-link to="/admin">CMS Dashboard</nuxt-link>
     </button>
     <!-- <button @click="logout">logout</button> -->
@@ -62,8 +65,8 @@ export default {
   },
   methods: {
     logout() {
-      this.$strapi.logout()
-      this.$router.push('/')
+      // this.$strapi.logout()
+      this.$router.push('/logout')
     },
     async getFiles() {
       // this.$strapi.
