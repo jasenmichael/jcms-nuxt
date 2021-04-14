@@ -69,19 +69,19 @@ export default async () => {
       // '@nuxt/content',
       // https://strapi.nuxtjs.org/setup
       '@nuxtjs/strapi',
-      '@nuxtjs/proxy',
+      // '@nuxtjs/proxy',
     ],
-    proxy: {
-      '/api': {
-        target: process.env.STRAPI_URL || 'http://localhost:1337',
-        pathRewrite: {
-          '^/api': '/',
-        },
-      },
-    },
-    strapi: {
-      url: '/api',
-    },
+    // proxy: {
+    //   '/api': {
+    //     target: process.env.STRAPI_URL || 'http://localhost:1337',
+    //     pathRewrite: {
+    //       '^/api': '/',
+    //     },
+    //   },
+    // },
+    // strapi: {
+    //   url: '/api',
+    // },
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {},
 
