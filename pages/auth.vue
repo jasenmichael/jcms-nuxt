@@ -114,8 +114,8 @@ export default {
       this.$strapi.logout()
       this.$router.push('/')
     },
-    async loginStrapiAdmin() {
-      return await fetch(`${this.$config.strapiUrl}/admin/login`, {
+    loginStrapiAdmin() {
+      fetch(`${this.$config.strapiUrl}/admin/login`, {
         credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',

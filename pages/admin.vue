@@ -104,9 +104,8 @@ export default {
           //  send strapiInfo to iframe via sendMessage
           adminIframe.contentWindow.postMessage(
             JSON.stringify({ ...this.getStrapiInfo(), method: 'login' }),
-            '*'
-            // this.$config.frontendUrl
-            // this.$config.strapiUrl
+            // '*'
+            this.$config.strapiUrl
           )
         })
       }
