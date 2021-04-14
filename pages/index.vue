@@ -24,9 +24,7 @@
     </p>
     <p class="capitalize font-bold">public endpoints:</p>
     <div v-for="(endpoint, i) in endpoints" :key="i">
-      <a class="pl-4" :href="$config.strapiUrl + endpoint" target="_blank">
-        > {{ endpoint }}</a
-      >
+      <a class="pl-4" :href="endpoint" target="_blank"> > {{ endpoint }}</a>
     </div>
     <hr class="pt-3" />
     <pre>siteSettings: {{ siteSettings }}</pre>
@@ -38,7 +36,7 @@ export default {
   async asyncData({ $strapi, $config }) {
     const siteSettings = await $strapi.find('site-settings')
     const endpoints = await $config.contentTypes.map(
-      (type) => `/${type.endpoint}`
+      (type) => `${$config.strapiUrl}/${type.endpoint}`
     )
     return { siteSettings, endpoints }
   },
