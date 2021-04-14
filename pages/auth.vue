@@ -105,15 +105,17 @@ export default {
         identifier: this.formValues.email,
         password: this.formValues.password,
       })
-      this.loginStrapiAdmin()
+      const strapiUser = await this.loginStrapiAdmin()
+      // eslint-disable-next-line no-console
+      console.log('strapiUser', strapiUser)
       this.$router.push('/me')
     },
     logout() {
       this.$strapi.logout()
       this.$router.push('/')
     },
-    loginStrapiAdmin() {
-      return fetch(`${this.$config.strapiUrl}/admin/login`, {
+    async loginStrapiAdmin() {
+      return await fetch(`${this.$config.strapiUrl}/admin/login`, {
         credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',

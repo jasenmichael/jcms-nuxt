@@ -18,13 +18,13 @@
             <div class="ml-auto">
               <div>
                 <nuxt-link
-                  v-if="!$strapi.user"
+                  v-show="!$strapi.user"
                   to="/auth"
                   class="border-2 border-gray-300 rounded px-2"
                 >
                   Login/Register
                 </nuxt-link>
-                <div v-else>
+                <div v-show="$strapi.user">
                   <nuxt-link
                     class="border-2 border-gray-300 rounded px-2"
                     to="/me"
