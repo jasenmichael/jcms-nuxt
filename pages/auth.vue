@@ -112,6 +112,8 @@ export default {
     },
     logout() {
       this.$strapi.logout()
+      localStorage.removeItem('adminJwtToken')
+      localStorage.removeItem('adminUserInfo')
       this.$router.push('/')
     },
     loginStrapiAdmin() {
