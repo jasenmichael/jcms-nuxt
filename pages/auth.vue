@@ -99,6 +99,11 @@ export default {
       return this.$strapi.user
     },
   },
+  beforeMount() {
+    if (this.$strapi.user) {
+      this.$router.push({ path: '/me' })
+    }
+  },
   methods: {
     async login() {
       await this.$strapi.login({

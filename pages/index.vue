@@ -15,7 +15,9 @@
     <hr />
     <p class="capitalize font-bold">public endpoints:</p>
     <div v-for="(endpoint, i) in endpoints" :key="i">
-      <a class="pl-4" :href="endpoint" target="_blank"> > {{ endpoint }}</a>
+      <a class="pl-4" :href="$config.strapiUrl + endpoint" target="_blank">
+        > {{ endpoint }}</a
+      >
     </div>
     <hr class="pt-3" />
     <!-- <pre>siteSettings: {{ siteSettings }}</pre> -->
