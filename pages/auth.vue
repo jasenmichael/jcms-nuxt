@@ -51,9 +51,10 @@
           </div>
         </nav>
       </div>
+
       <div class="mx-auto pt-6">
         <div class="p-8 border-2 border-gray-300 rounded-lg">
-          <div v-if="selected === 'login'">
+          <div v-if="selected === 'login'" class="max-w-xs w-full">
             <FormulateForm v-model="formValues">
               <FormulateInput label="Email" type="email" name="email" />
               <FormulateInput
@@ -63,17 +64,21 @@
               />
             </FormulateForm>
             <button
-              class="font- ml-auto border-2 mt-4 py-3 w-full border-gray-300"
+              class="ml-auto border-2 mt-4 py-3 w-full border-gray-300"
               @click="login()"
             >
               Login
             </button>
           </div>
+
           <div v-if="selected === 'register'">
             <div>Register</div>
             username email password
           </div>
         </div>
+      </div>
+      <div>
+        <p class="text-red-700 text-center w-full pt-4">{{ errMsg || ' ' }}</p>
       </div>
     </div>
   </div>
@@ -92,6 +97,7 @@ export default {
         password: '',
       },
       selected: 'login',
+      errMsg: null,
     }
   },
   computed: {
@@ -106,14 +112,26 @@ export default {
   },
   methods: {
     async login() {
-      await this.$strapi.login({
-        identifier: this.formValues.email,
-        password: this.formValues.password,
-      })
-      const strapiUser = await this.loginStrapiAdmin()
+      try {
+        await this.$strapi.login({
+          identifier: this.formValues.email,
+          password: this.formValues.password,
+        })
+      } catch (error) {
+        this.errMsg = error
+          ? error.response.data.message[0].messages[0].message
+          : ' '
+        setTimeout(() => {
+          this.errMsg = null
+        }, 2000)
+      }
+      if (this.$strapi.user) {
+        await this.loginStrapiAdmin()
+        this.$router.push('/me')
+      }
+
       // eslint-disable-next-line no-console
-      console.log('strapiUser', strapiUser)
-      this.$router.push('/me')
+      // console.log('strapiUser', strapiUser)
     },
     logout() {
       this.$strapi.logout()
@@ -122,13 +140,17 @@ export default {
       this.$router.push('/')
     },
     loginStrapiAdmin() {
+      // const key = this.formValues.email
+      const email = this.formValues.email.includes('@')
+        ? this.formValues.email
+        : this.$strapi.user.email
       fetch(`${this.$config.strapiUrl}/admin/login`, {
         credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: this.formValues.email,
+          email,
           password: this.formValues.password,
         }),
         method: 'POST',
@@ -137,19 +159,14 @@ export default {
         .then((res) => {
           const token = res.data.token || null
           const user = res.data.user || null
-          // eslint-disable-next-line no-console
-          // console.log({
-          //   token,
-          //   user,
-          // })
-          // sessionStorage.setItem('adminJwtToken', JSON.stringify(token))
-          // sessionStorage.setItem('adminUserInfo', JSON.stringify(user))
           localStorage.setItem('adminJwtToken', JSON.stringify(token))
           localStorage.setItem('adminUserInfo', JSON.stringify(user))
         })
-        .catch((err) => {
+        .catch((error) => {
           // eslint-disable-next-line no-console
-          console.log(err)
+          this.errMsg = error
+          // eslint-disable-next-line no-console
+          console.log(error)
         })
     },
   },
