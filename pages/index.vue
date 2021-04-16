@@ -42,10 +42,14 @@
 <script>
 export default {
   async asyncData({ $strapi, $config }) {
-    const siteSettings = await $strapi.find('site-settings')
-    const endpoints = await $config.contentTypes.map(
-      (type) => `/${type.endpoint}`
-    )
+    let siteSettings, endpoints
+    try {
+      siteSettings = (await $strapi.find('site-settings')) || {}
+      endpoints = await $config.contentTypes.map((type) => `/${type.endpoint}`)
+    } catch (error) {
+      siteSettings = {}
+      endpoints = []
+    }
     return { siteSettings, endpoints }
   },
   data: () => {
