@@ -42,16 +42,16 @@
 <script>
 export default {
   middleware: 'auth',
-  data: () => {
-    return {
-      files: [],
-      filesLoaded: false,
-      res: '',
-      uploadFile: null,
-      uploadPreview: null,
-      uploading: false,
-    }
-  },
+  // data: () => {
+  //   return {
+  //     files: [],
+  //     filesLoaded: false,
+  //     res: '',
+  //     uploadFile: null,
+  //     uploadPreview: null,
+  //     uploading: false,
+  //   }
+  // },
   computed: {
     user() {
       return this.$strapi.user
@@ -60,62 +60,62 @@ export default {
       return this.$strapi.getToken()
     },
   },
-  mounted() {
-    this.getFiles()
-  },
-  methods: {
-    logout() {
-      // this.$strapi.logout()
-      this.$router.push('/logout')
-    },
-    async getFiles() {
-      // this.$strapi.
-      this.files = await this.$strapi.find('upload/files')
-      // .then((files) =>
-      //   files.map((file) => {
-      //     return {
-      //       name: file.name,
-      //       url: file.url,
-      //       ...file.formats,
-      //     }
-      //   })
-      // )
-      this.filesLoaded = true
-    },
-    selectedFile(event) {
-      this.uploadFile = event.target.files[0]
-      this.uploadPreview = URL.createObjectURL(this.uploadFile)
-    },
-    async upload() {
-      const formdata = new FormData()
-      formdata.append('path', '/wazza/')
-      formdata.append('files', this.uploadFile, this.uploadFile.name)
-      formdata.append('fileInfo', {
-        alternativeText: 'alt',
-        caption: 'cap',
-        name: 'newname.png',
-      })
+  // mounted() {
+  //   this.getFiles()
+  // },
+  // methods: {
+  //   logout() {
+  //     // this.$strapi.logout()
+  //     this.$router.push('/logout')
+  //   },
+  //   async getFiles() {
+  //     // this.$strapi.
+  //     this.files = await this.$strapi.find('upload/files')
+  //     // .then((files) =>
+  //     //   files.map((file) => {
+  //     //     return {
+  //     //       name: file.name,
+  //     //       url: file.url,
+  //     //       ...file.formats,
+  //     //     }
+  //     //   })
+  //     // )
+  //     this.filesLoaded = true
+  //   },
+  //   selectedFile(event) {
+  //     this.uploadFile = event.target.files[0]
+  //     this.uploadPreview = URL.createObjectURL(this.uploadFile)
+  //   },
+  //   async upload() {
+  //     const formdata = new FormData()
+  //     formdata.append('path', '/wazza/')
+  //     formdata.append('files', this.uploadFile, this.uploadFile.name)
+  //     formdata.append('fileInfo', {
+  //       alternativeText: 'alt',
+  //       caption: 'cap',
+  //       name: 'newname.png',
+  //     })
 
-      // const requestOptions = {
-      //   method: 'POST',
-      //   // body: this.formdata,
-      //   redirect: 'follow',
-      // }
-      this.res = 'Uploading...'
-      if (process.client) {
-        document.getElementById('uploadFile').value = null
-      }
-      this.uploading = true
-      const file = await this.$strapi.create('upload', formdata)
-      this.res = file[0].name + ' uploaded sucessfully'
-      await this.getFiles()
-      this.uploading = false
-      this.uploadPreview = false
-      setTimeout(() => {
-        this.res = ''
-      }, 1100)
-    },
-  },
+  //     // const requestOptions = {
+  //     //   method: 'POST',
+  //     //   // body: this.formdata,
+  //     //   redirect: 'follow',
+  //     // }
+  //     this.res = 'Uploading...'
+  //     if (process.client) {
+  //       document.getElementById('uploadFile').value = null
+  //     }
+  //     this.uploading = true
+  //     const file = await this.$strapi.create('upload', formdata)
+  //     this.res = file[0].name + ' uploaded sucessfully'
+  //     await this.getFiles()
+  //     this.uploading = false
+  //     this.uploadPreview = false
+  //     setTimeout(() => {
+  //       this.res = ''
+  //     }, 1100)
+  //   },
+  // },
 }
 </script>
 

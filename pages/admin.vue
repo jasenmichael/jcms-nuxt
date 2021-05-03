@@ -4,12 +4,17 @@
     <div
       v-show="loaded"
       class="transition-opacity cursor-pointer fixed pl-4 text-white text-2xl font-bold flex items-center"
-      style="background-color: #00695c; width: 240px; height: 60px"
+      style="
+        background-color: #00695c;
+        width: 240px;
+        height: 60px;
+        font-family: Arial, sans-serif;
+      "
       @click="routeIframe('/')"
     >
-      <span class="font-medium"> &lt; </span>
+      <span class="font-medium font-serif"> &lt; </span>
       JCMS
-      <span class="font-medium"> /&gt; </span>
+      <span class="font-medium font-serif"> /&gt; </span>
     </div>
 
     <div class="w-full" :style="`height: calc(100vh - ${navbarHeight}px)`">
