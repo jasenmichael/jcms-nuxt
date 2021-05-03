@@ -4,7 +4,7 @@ require('dotenv').config()
 
 async function getContentTypes() {
   return await axios
-    .get(`${process.env.STRAPI_URL}/hello`)
+    .get(`${process.env.STRAPI_URL}/content-types`)
     .then((res) => {
       // console.log(res.data)
       return JSON.parse(JSON.stringify(res.data))
@@ -36,7 +36,10 @@ export default async () => {
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
-    css: [],
+    css: [
+      './node_modules/@braid/vue-formulate/themes/snow/snow.scss',
+      '~/assets/style.css',
+    ],
     generate: {
       fallback: true,
     },
@@ -57,7 +60,24 @@ export default async () => {
       '@nuxtjs/tailwindcss',
       // https://vueformulate.com/guide/installation/#nuxt
       '@braid/vue-formulate/nuxt',
+      //  https://google-fonts.nuxtjs.org
+      '@nuxtjs/google-fonts',
     ],
+    googleFonts: {
+      families: {
+        Roboto: true,
+        'Josefin+Sans': true,
+        Lato: [100, 300],
+        Raleway: {
+          wght: [100, 400],
+          ital: [100],
+        },
+        'Montserrat+Alternates': {
+          ital: [500, 600, 700, 800],
+          wght: [500, 600, 700, 800],
+        },
+      },
+    },
 
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
