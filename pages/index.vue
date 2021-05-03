@@ -1,5 +1,6 @@
 <template>
   <div class="max-w-2xl flex flex-col mx-auto pt-6">
+    <!-- {{ stuff }} -->
     <div class="text-lg">
       <span class="font-bold">frontendUrl:</span> {{ $config.baseUrl }}
     </div>
@@ -36,75 +37,43 @@
         </span>
       </p>
     </div>
+    <hr />
+    <pre>{{ $strapi.user }}</pre>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ $strapi, $config }) {
-    let siteSettings, endpoints
-    try {
-      siteSettings = (await $strapi.find('site-settings')) || {}
-      endpoints = await $config.contentTypes.map((type) => `/${type.endpoint}`)
-    } catch (error) {
-      siteSettings = {}
-      endpoints = []
-    }
-    return { siteSettings, endpoints }
-  },
+  // async asyncData({ $strapi, $config }) {
+  //   let siteSettings, endpoints
+  //   try {
+  //     siteSettings = (await $strapi.find('site-settings')) || {}
+  //     endpoints = await $config.contentTypes.map((type) => `/${type.endpoint}`)
+  //   } catch (error) {
+  //     siteSettings = {}
+  //     endpoints = []
+  //   }
+  //   return { siteSettings, endpoints }
+  // },
   data: () => {
-    return {}
+    return {
+      siteSettings: {},
+      endpoints: [],
+    }
   },
-  // computed: {
-  //   user() {
-  //     return this.$strapi.user
-  //   },
-  // },
-  // methods: {
-  //   async login() {
-  //     await this.$strapi.login({
-  //       identifier: this.email,
-  //       password: this.password,
-  //     })
-  //     this.loginStrapiAdmin()
-  //     // this.$router.push('/authenticated')
-  //   },
-  //   logout() {
-  //     this.$strapi.logout()
-  //     this.$router.push('/')
-  //   },
-  //   loginStrapiAdmin() {
-  //     fetch(`${this.$config.strapiUrl}/admin/login`, {
-  //       credentials: 'omit',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         email: this.email,
-  //         password: this.password,
-  //       }),
-  //       method: 'POST',
-  //     })
-  //       .then((res) => res.json())
-  //       .then((res) => {
-  //         const token = res.data.token || null
-  //         const user = res.data.user || null
-  //         // eslint-disable-next-line no-console
-  //         // console.log({
-  //         //   token,
-  //         //   user,
-  //         // })
-  //         // sessionStorage.setItem('adminJwtToken', JSON.stringify(token))
-  //         // sessionStorage.setItem('adminUserInfo', JSON.stringify(user))
-  //         localStorage.setItem('adminJwtToken', JSON.stringify(token))
-  //         localStorage.setItem('adminUserInfo', JSON.stringify(user))
-  //       })
-  //       .catch((err) => {
-  //         // eslint-disable-next-line no-console
-  //         console.log(err)
-  //       })
-  //   },
-  // },
+  async fetch() {
+    try {
+      this.siteSettings = (await this.$strapi.find('site-settings')) || {}
+      this.endpoints = await this.$config.contentTypes.map(
+        (type) => `/${type.endpoint}`
+      )
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+  },
+  fetchOnServer: true, // false,
+  // mounted() {},
 }
 </script>
 
